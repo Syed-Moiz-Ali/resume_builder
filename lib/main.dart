@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_icons/flutter_icons.dart'; // You may need to add this package to your pubspec.yaml
 
 void main() {
   runApp(const MyApp());
@@ -7,119 +8,337 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Resume Builder',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const ResumePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class ResumePage extends StatelessWidget {
+  const ResumePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    //  final pdf = pw.Document();
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Bartosz Jarocki",
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "Wrocław, Poland, CET",
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        SizedBox(height: 8.0),
+                        Text(
+                          "Full Stack Engineer focused on building products with extra attention to detail",
+                          style: TextStyle(fontSize: 14.0),
+                        ),
+                        SizedBox(height: 16.0),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: CircleAvatar(
+                      radius: 40.0,
+                      backgroundImage: NetworkImage(
+                        "https://avatars.githubusercontent.com/u/1017620?v=4",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              buildSection(
+                "About",
+                const Text(
+                    "As a Full Stack Engineer, I have successfully taken multiple products from 0 to 1. I lead teams effectively, ensuring an environment where people can do their best work. Currently, I work mostly with TypeScript, React, Node.js, and GraphQL. I have over 8 years of experience in working remotely with companies all around the world."),
+              ),
+              buildSection(
+                "Work Experience",
+                buildWorkExperience(),
+              ),
+              buildSection(
+                "Education",
+                buildEducation(),
+              ),
+              buildSection(
+                "Skills",
+                buildSkills(),
+              ),
+              buildSection(
+                "Projects",
+                buildProjects(),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Add logic for handling button press
+                },
+                child: const Text('Generate Resume'),
+              ),
+            ],
+          ),
+        ),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+    );
+  }
+
+  Widget buildSection(String title, Widget content) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16.0),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8.0),
+        content,
+      ],
+    );
+  }
+
+  Widget buildWorkExperience() {
+    return Column(
+      children: [
+        buildWorkCard(
+          "Parabol",
+          "https://parabol.co",
+          ["Remote"],
+          "Senior Full Stack Developer",
+          "2021",
+          "2024",
+          "Implemented new features, led squad, worked on improving the way developers ship the code, started migration from Emotion to Tailwind CSS and more. Technologies: React, TypeScript, GraphQL",
+        ),
+        // Add more work experience cards as needed
+      ],
+    );
+  }
+
+  Widget buildEducation() {
+    return Column(
+      children: [
+        buildEducationCard(
+          "Wrocław University of Technology",
+          "Bachelor's Degree in Control systems engineering and Robotics",
+          "2007",
+          "2010",
+        ),
+        // Add more education cards as needed
+      ],
+    );
+  }
+
+  Widget buildSkills() {
+    return Wrap(
+      spacing: 8.0,
+      children: [
+        buildBadge("JavaScript"),
+        buildBadge("TypeScript"),
+        buildBadge("React/Next.js/Remix"),
+        buildBadge("Node.js"),
+        buildBadge("GraphQL"),
+        buildBadge("Relay"),
+        buildBadge("WebRTC"),
+      ],
+    );
+  }
+
+  Widget buildProjects() {
+    return GridView.count(
+      crossAxisCount: 1,
+      crossAxisSpacing: 8.0,
+      mainAxisSpacing: 8.0,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: [
+        buildProjectCard(
+          "Consultly",
+          [
+            "Side Project",
+            "TypeScript",
+            "Next.js",
+            "Vite",
+            "GraphQL",
+            "WebRTC"
+          ],
+          "A platform to build and grow your online business",
+          "https://consultly.com/",
+        ),
+        // Add more project cards as needed
+      ],
+    );
+  }
+
+  Widget buildWorkCard(
+    String company,
+    String link,
+    List<String> badges,
+    String title,
+    String start,
+    String end,
+    String description,
+  ) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  company,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
+                ),
+                Text(
+                  "$start - $end",
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 8.0),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8.0),
+            Text(description),
+            const SizedBox(height: 8.0),
+            Row(
+              children: badges.map((badge) => buildBadge(badge)).toList(),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Widget buildEducationCard(
+    String school,
+    String degree,
+    String start,
+    String end,
+  ) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              school,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0,
+              ),
+            ),
+            const SizedBox(height: 8.0),
+            Text(
+              degree,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "$start - $end",
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildBadge(String text) {
+    return Chip(
+      label: Text(text),
+    );
+  }
+
+  Widget buildProjectCard(
+    String title,
+    List<String> techStack,
+    String description,
+    String link,
+  ) {
+    return Container(
+      width: double.infinity,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              Text(description),
+              const SizedBox(height: 8.0),
+              Wrap(
+                children: techStack.map((tech) => buildBadge(tech)).toList(),
+              ),
+              const SizedBox(height: 8.0),
+              ElevatedButton(
+                onPressed: () {
+                  // Add logic for handling button press
+                },
+                child: const Text('Visit Project'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
